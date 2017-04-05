@@ -1,0 +1,6 @@
+*.pyc
+old/lista1/data/
+heldkarp-amp/
+.ipynb_checkpoints/
+*~
+qap_data/
