@@ -37,12 +37,10 @@ class MOTSPDefinitions(ProblemDefinitions):
 
     def f1(self, individual):
         inds = np.vstack([individual.features, individual.features[1:] + [individual.features[0]]])
-        #inds = individual.inds
         return self.dists0[inds[0], inds[1]].sum()
 
     def f2(self, individual):
         inds = np.vstack([individual.features, individual.features[1:] + [individual.features[0]]])
-        #inds = individual.inds
         return self.dists1[inds[0], inds[1]].sum()
 
     # not implemented

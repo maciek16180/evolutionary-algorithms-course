@@ -11,7 +11,7 @@ class MOTSP(Problem):
         self.motsp_definitions = motsp_definitions
         self.max_objectives = [None, None]
         self.min_objectives = [None, None]
-        self.problem_type = None
+        self.problem_type = 'MOTSP'
         self.n = 100
 
     def __dominates(self, individual2, individual1):
@@ -21,12 +21,12 @@ class MOTSP(Problem):
                             self.motsp_definitions.f2(individual1) < self.motsp_definitions.f2(individual2)
         return worse_than_other and better_than_other
 
-    def generateIndividual(self):
+    def generateIndividual(self, init=True):
         individual = Individual()
-        individual.features = list(np.random.permutation(self.n))
-        #individual.inds = np.vstack([individual.features, individual.features[1:] + [individual.features[0]]])
+        if init:
+            individual.features = list(np.random.permutation(self.n))
+            self.calculate_objectives(individual)
         individual.dominates = functools.partial(self.__dominates, individual1=individual)
-        self.calculate_objectives(individual)
         return individual
 
     def calculate_objectives(self, individual):
