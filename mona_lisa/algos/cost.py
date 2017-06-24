@@ -3,10 +3,10 @@ from PIL import Image, ImageDraw
 import skimage.color as color
 
 
-def draw_individual_array(ind, shape, mode='polygon_simple'):
+def draw_individual_array(ind, shape, mode='polygon_simple', board='white'):
 
     X, Y = shape
-    img = Image.new('RGB', shape, 'white')
+    img = Image.new('RGB', shape, board)
     drw = ImageDraw.Draw(img, 'RGBA')    
     
     num_figs, pol_len = ind.shape
@@ -33,13 +33,13 @@ def draw_individual_array(ind, shape, mode='polygon_simple'):
         
     return img
 
-def draw_individual_list(ind, shape, mode='polygon_simple'):
+def draw_individual_list(ind, shape, mode='polygon_simple', board='white'):
 
     X, Y = shape
-    img = Image.new('RGB', shape, 'white')
+    img = Image.new('RGB', shape, board)
     drw = ImageDraw.Draw(img, 'RGBA')
     
-    figs, colors = ind
+    figs, colors = ind[:2]
     figs = [map(tuple, fig) for fig in figs]
     colors = map(tuple, colors)
     
@@ -57,16 +57,16 @@ def dist(img, matrix, mode='euclid'):
     img = np.array(img, dtype=np.int32)
     
     if mode == 'euclid':
-        return ((img - matrix)**2).sum() # sum of squared pixel-wise distances
+        return ((img - matrix)**2).sum(axis=2).mean() # mean squared per-pixel distance
     else:
         raise Exception('%s is not a valid metric' % mode)
         
         
-def cost(ind, ref_img, dist_mode='euclid', mode='polygon_simple', ref_matrix=None):
+def cost(ind, ref_img, dist_mode='euclid', mode='polygon_simple', ref_matrix=None, board='white'):
     if isinstance(ind, np.ndarray):
-        img = draw_individual_array(ind, ref_img.size, mode=mode)
+        img = draw_individual_array(ind, ref_img.size, mode=mode, board=board)
     else:
-        img = draw_individual_list(ind, ref_img.size, mode=mode)
+        img = draw_individual_list(ind, ref_img.size, mode=mode, board=board)
     if ref_matrix is None:
         ref_matrix = np.array(ref_img, dtype=np.int32)
     return int(dist(img, ref_matrix, mode=dist_mode))

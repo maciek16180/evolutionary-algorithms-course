@@ -7,7 +7,7 @@ from itertools import chain
 from copy import deepcopy, copy
 
 
-class PseudoCGA_dyn():
+class HC_dyn():
     
     def __init__(self, pop_size, num_children, ref_img,
                  F='default', min_num_edges=3, max_num_edges=3, max_num_figs=50, mode='polygon_simple',
@@ -19,8 +19,8 @@ class PseudoCGA_dyn():
         self.mode = mode
         self.shape = ref_img.size
         
-        self.add_pol_mut = mut_add_pol
-        self.add_point_mut = mut_add_point
+        self.mut_add_pol = mut_add_pol
+        self.mut_add_point = mut_add_point
         
         if self.mode == 'polygon_simple':
             self.max_num_edges = max_num_edges
@@ -42,11 +42,11 @@ class PseudoCGA_dyn():
         self.population = [([], []) for i in xrange(self.pop_size)] # starting individuals have 0 polygons
         self.scores = self._score_population(self.population)
         
-        for i in xrange(self.pop_size):
-            for j in xrange(self.max_num_figs):
-                p, c = self._generate_figure()
-                self.population[i][0].append(p)
-                self.population[i][1].append(c)
+        #for i in xrange(self.pop_size):
+        #    for j in xrange(self.max_num_figs):
+        #        p, c = self._generate_figure()
+        #        self.population[i][0].append(p)
+        #        self.population[i][1].append(c)
         
         self.best_ind = self.population[self.scores.argmax()]
         self.best_ind_score = self.scores.max()
@@ -130,7 +130,7 @@ class PseudoCGA_dyn():
         imshow(self.best_imgs[-1])
         
     def save(self, name):
-        name = name + '_pcgad_%i_%i_%i_%i_%i' % (self.pop_size, self.num_children, self.max_num_figs, 
+        name = name + '_hcdyn_%i_%i_%i_%i_%i' % (self.pop_size, self.num_children, self.max_num_figs, 
                                                  self.max_num_edges, self.iterations_done)
         with open(name + '.pkl', 'w') as f:
             pickle.dump(self.log, f)

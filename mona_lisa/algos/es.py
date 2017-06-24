@@ -8,7 +8,8 @@ from cx import cx_one_point, cx_random
 class ES():
     
     def __init__(self, pop_size, num_children, learning_rate, std_init, ref_img, 
-                 roulette=True, cx='default', F='default', num_edges=3, num_figs=50, mode='polygon_simple', version='plus'):
+                 roulette=True, cx='default', F='default', num_edges=3, num_figs=50, 
+                 mode='polygon_simple', version='plus'):
         
         assert version in ['plus', 'comma']
         
@@ -106,6 +107,15 @@ class ES():
                 print 'Scores after %i iterations: %s' % (self.iterations_done, self.log[-1][1])
                 self.best_imgs.append(self.best_img())
         imshow(self.best_imgs[-1])
+        
+    def save(self, name):
+        name = name + '_es_%i_%i_%.3f_%.3f_%i_%i_%i' % (self.pop_size, self.num_children, 
+                                                        self.learning_rate, self.std_init,
+                                                        self.num_figs, self.num_edges, self.iterations_done)
+        with open(name + '.pkl', 'w') as f:
+            pickle.dump(self.log, f)
+            
+        self.best_imgs[-1].save(name + '.png', 'png')
                                       
     def best_img(self):
         return draw_individual(self.best_ind[:self.chrom_len].reshape(self.num_figs, self.fig_len), 

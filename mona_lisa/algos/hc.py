@@ -5,7 +5,7 @@ from matplotlib.pyplot import imshow
 import random
 
 
-class PseudoCGA():
+class HC():
     
     def __init__(self, pop_size, num_children, ref_img,
                  F='default', num_edges=3, num_figs=50, mode='polygon_simple'):
@@ -89,7 +89,7 @@ class PseudoCGA():
         imshow(self.best_imgs[-1])
         
     def save(self, name):
-        name = name + '_pcga_%i_%i_%i_%i_%i' % (self.pop_size, self.num_children, self.num_figs, 
+        name = name + '_hc_%i_%i_%i_%i_%i' % (self.pop_size, self.num_children, self.num_figs, 
                                                 self.num_edges, self.iterations_done)
         with open(name + '.pkl', 'w') as f:
             pickle.dump(self.log, f)
